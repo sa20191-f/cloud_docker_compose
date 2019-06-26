@@ -59,7 +59,7 @@ services:
       - songs_path_db
   upload_song_ms:
     container_name: upload_song_ms
-    image: pahigueraf/upload_song_ms
+    image: pahigueraf/upload_songs_ms
     restart: always
     ports:
       - "3002:3002"
