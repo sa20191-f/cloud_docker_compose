@@ -15,7 +15,7 @@ services:
     depends_on:
       - users_db
     environment:
-      - PORT: '3001'
+      PORT: '3001'
     #ports:
     #  - "3001:3001"
   lists-db:
@@ -37,7 +37,7 @@ services:
     volumes:
       - /lists-app
     environment:
-      - PORT: '4000'
+      PORT: '4000'
     #ports:
     #  - "4000:4000"
     depends_on:
