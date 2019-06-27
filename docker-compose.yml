@@ -96,7 +96,6 @@ services:
     ports:
       - "80:80"
   play_song_ms:
-    build: .
     container_name: play_song_ms
     image: campuzanoa/docker_play_song_ms
     environment:
