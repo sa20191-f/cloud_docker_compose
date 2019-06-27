@@ -95,4 +95,14 @@ services:
       - tumusica-api
     ports:
       - "80:80"
+  play_song_ms:
+    build: .
+    container_name: play_song_ms
+    image: campuzanoa/docker_play_song_ms
+    environment:
+      PORT: '3004'
+    ports:
+      - "3004:3004"
+    links:
+      - songs_path_db
   
