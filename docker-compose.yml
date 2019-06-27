@@ -104,4 +104,8 @@ services:
       - "3004:3004"
     links:
       - songs_path_db
-  
+  tu-musica-web:
+    container_name: tu-musica-web
+    image: serbatero/tu-musica-web
+    ports:
+      - "4100:4100"  
