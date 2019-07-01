@@ -69,7 +69,7 @@ services:
       LISTS_URL: 'lists-ms'
       LISTS_PORT: '4000'
       LISTS_ENTRY: '/'
-      WSINTERFACE_URL: '34.66.226.238'
+      WSINTERFACE_URL: 'tu_musica_interface'
       WSINTERFACE_PORT: '4500'
       WSINTERFACE_ENTRY: '/'
       PLAY_URL: 'play_song_ms'
