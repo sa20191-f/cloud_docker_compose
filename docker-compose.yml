@@ -2,14 +2,14 @@ version: '2.1'
 
 services:
   users_db:
-    container_name: users-db
+    container_name: users_db
     image: nouchka/sqlite3:latest
     stdin_open: true
     tty: true
     volumes:
       - ./db/:/root/db/
   users_ms:
-    container_name: users-ms
+    container_name: users_ms
     image: fgomezl/register_and_auth_ms
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:3001"
     depends_on:
@@ -19,7 +19,7 @@ services:
     #ports:
     #  - "3001:3001"
   lists-db:
-    container_name: lists-db
+    container_name: lists_db
     image: mysql:5.7
     ports:
       - "3306:3306"
@@ -31,7 +31,7 @@ services:
       MYSQL_HOST: lists-db
   #microservicio de recursos
   lists-ms:
-    container_name: lists-ms
+    container_name: lists_ms
     image: serbatero/lists-ms
     command: bundle exec rails s -p 4000 -b '0.0.0.0'
     volumes:
@@ -90,7 +90,7 @@ services:
     #  - "5000:5000"
   tumusica-proxy:
     image: pahigueraf/sa_academy_proxy
-    container_name: tumusica-proxy
+    container_name: tumusica_proxy
     depends_on:
       - tumusica-api
     ports:
@@ -105,7 +105,7 @@ services:
     links:
       - songs_path_db
   tu-musica-web:
-    container_name: tu-musica-web
-    image: serbatero/tu-musica-web
+    container_name: tu-musica_wa
+    image: pahigueraf/tumusica_web_client
     ports:
       - "4100:4100"  
