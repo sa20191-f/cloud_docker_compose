@@ -203,3 +203,12 @@ services:
       - "8085:80"
     links:
       - academy-ldap 
+  wsinterface-ms:
+    container_name: tu_musica_interface
+    image: pahigueraf/interface
+    command: bundle exec rails s -p 4500 -b '0.0.0.0'
+    volumes:
+      - /lists-app
+    ports:
+      - "4500:4500"  
+
