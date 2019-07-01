@@ -66,10 +66,10 @@ services:
     image: pahigueraf/tumusica-api
     environment:
       SHOW_URLS: 'true'
-      LISTS_URL: 'lists_ms'
+      LISTS_URL: 'lists-ms'
       LISTS_PORT: '4000'
       LISTS_ENTRY: '/'
-      WSINTERFACE_URL: 'tu_musica_interface'
+      WSINTERFACE_URL: 'wsinterface-ms'
       WSINTERFACE_PORT: '4500'
       WSINTERFACE_ENTRY: '/'
       PLAY_URL: 'play_song_ms'
