@@ -8,7 +8,7 @@ services:
     tty: true
     volumes:
       - ./db/:/root/db/
-  users_ms:
+  users-ms:
     container_name: users_ms
     image: fgomezl/register_and_auth_ms
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:3001"
@@ -75,7 +75,7 @@ services:
       PLAY_URL: 'play_song_ms'
       PLAY_PORT: '3004'
       PLAY_ENTRY: '/api'
-      USERS_URL: 'users_ms'
+      USERS_URL: 'users-ms'
       USERS_PORT: '3001'
       USERS_ENTRY: 'api/v1'
       UPLOAD_URL: 'upload_song_ms'
