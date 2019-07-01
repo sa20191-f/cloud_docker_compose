@@ -16,8 +16,8 @@ services:
       - users_db
     environment:
       PORT: '3001'
-    #ports:
-    #  - "3001:3001"
+    ports:
+      - "3001:3001"
   lists-db:
     container_name: lists-db
     image: mysql:5.7
@@ -29,7 +29,6 @@ services:
       MYSQL_PASSWORD: 123
       MYSQL_DATABASE: lists-db
       MYSQL_HOST: lists-db
-  #microservicio de recursos
   lists-ms:
     container_name: lists-ms
     image: serbatero/lists-ms
@@ -38,8 +37,8 @@ services:
       - /lists-app
     environment:
       PORT: '4000'
-    #ports:
-    #  - "4000:4000"
+    ports:
+      - "4000:4000"
     depends_on:
       - lists-db
   songs_path_db:
@@ -51,8 +50,8 @@ services:
     container_name: songs_path_ms
     image: pahigueraf/songs_path
     restart: always
-    #ports:
-    #  - "3003:3003"
+    ports:
+      - "3003:3003"
     environment:
       PORT: '3003'
     links:
@@ -70,12 +69,12 @@ services:
       LISTS_URL: 'lists-ms'
       LISTS_PORT: '4000'
       LISTS_ENTRY: '/'
-      #WSINTERFACE_URL: '192.168.99.101'
-      #WSINTERFACE_PORT: '4500'
-      #WSINTERFACE_ENTRY: '/'
-      #PLAY_URL: '192.168.99.101'
-      #PLAY_PORT: '3004'
-      #PLAY_ENTRY: '/api'
+      WSINTERFACE_URL: '34.66.226.238'
+      WSINTERFACE_PORT: '4500'
+      WSINTERFACE_ENTRY: '/'
+      PLAY_URL: 'play_song_ms'
+      PLAY_PORT: '3004'
+      PLAY_ENTRY: '/api'
       USERS_URL: 'users-ms'
       USERS_PORT: '3001'
       USERS_ENTRY: 'api/v1'
@@ -85,16 +84,16 @@ services:
       PATH_URL: 'songs_path_ms'
       PATH_PORT: '3003'
       PATH_ENTRY: ''
-      PORT: '5000'
-    #ports:
-    #  - "5000:5000"
-  tumusica-proxy:
-    image: pahigueraf/sa_academy_proxy
-    container_name: tumusica-proxy
-    depends_on:
-      - tumusica-api
+      PORT: '80'
     ports:
       - "80:80"
+  # tumusica-proxy:
+  #   image: pahigueraf/sa_academy_proxy
+  #   container_name: tumusica-proxy
+  #   depends_on:
+  #     - tumusica-api
+  #   ports:
+  #     - "80:80"
   play_song_ms:
     container_name: play_song_ms
     image: campuzanoa/docker_play_song_ms
@@ -108,4 +107,99 @@ services:
     container_name: tu-musica-web
     image: serbatero/tu-musica-web
     ports:
-      - "4100:4100"  
+      - "4100:4100"
+  academy-ldap:
+    image: osixia/openldap:1.1.8
+    environment:
+      COMPOSE_HTTP_TIMEOUT: 200
+      LDAP_LOG_LEVEL: "256"
+      LDAP_ORGANISATION: "Software Architecture"
+      LDAP_DOMAIN: "arqsoft.unal.edu.co"
+      LDAP_BASE_DN: ""
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_CONFIG_PASSWORD: "config"
+      LDAP_READONLY_USER: "false"
+      #LDAP_READONLY_USER_USERNAME: "readonly"
+      #LDAP_READONLY_USER_PASSWORD: "readonly"
+      LDAP_BACKEND: "hdb"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+      LDAP_TLS_PROTOCOL_MIN: "3.1"
+      LDAP_TLS_VERIFY_CLIENT: "demand"
+      LDAP_REPLICATION: "false"
+      #LDAP_REPLICATION_CONFIG_SYNCPROV: "binddn="cn=admin,cn=config" bindmethod=simple credentials=$LDAP_CONFIG_PASSWORD searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_DB_SYNCPROV: "binddn="cn=admin,$LDAP_BASE_DN" bindmethod=simple credentials=$LDAP_ADMIN_PASSWORD searchbase="$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap.example.org','ldap://ldap2.example.org']"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/lib/ldap
+      - /etc/ldap/slapd.d
+      - /container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "636:636"
+    hostname: "arqsoft.org"
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "academy-ldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:academy-ldap:
+    image: osixia/openldap:1.1.8
+    environment:
+      COMPOSE_HTTP_TIMEOUT: 200
+      LDAP_LOG_LEVEL: "256"
+      LDAP_ORGANISATION: "Software Architecture"
+      LDAP_DOMAIN: "arqsoft.unal.edu.co"
+      LDAP_BASE_DN: ""
+      LDAP_ADMIN_PASSWORD: "admin"
+      LDAP_CONFIG_PASSWORD: "config"
+      LDAP_READONLY_USER: "false"
+      #LDAP_READONLY_USER_USERNAME: "readonly"
+      #LDAP_READONLY_USER_PASSWORD: "readonly"
+      LDAP_BACKEND: "hdb"
+      LDAP_TLS: "true"
+      LDAP_TLS_CRT_FILENAME: "ldap.crt"
+      LDAP_TLS_KEY_FILENAME: "ldap.key"
+      LDAP_TLS_CA_CRT_FILENAME: "ca.crt"
+      LDAP_TLS_ENFORCE: "false"
+      LDAP_TLS_CIPHER_SUITE: "SECURE256:-VERS-SSL3.0"
+      LDAP_TLS_PROTOCOL_MIN: "3.1"
+      LDAP_TLS_VERIFY_CLIENT: "demand"
+      LDAP_REPLICATION: "false"
+      #LDAP_REPLICATION_CONFIG_SYNCPROV: "binddn="cn=admin,cn=config" bindmethod=simple credentials=$LDAP_CONFIG_PASSWORD searchbase="cn=config" type=refreshAndPersist retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_DB_SYNCPROV: "binddn="cn=admin,$LDAP_BASE_DN" bindmethod=simple credentials=$LDAP_ADMIN_PASSWORD searchbase="$LDAP_BASE_DN" type=refreshAndPersist interval=00:00:00:10 retry="60 +" timeout=1 starttls=critical"
+      #LDAP_REPLICATION_HOSTS: "#PYTHON2BASH:['ldap://ldap.example.org','ldap://ldap2.example.org']"
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: "true"
+      LDAP_SSL_HELPER_PREFIX: "ldap"
+    tty: true
+    stdin_open: true
+    volumes:
+      - /var/lib/ldap
+      - /etc/ldap/slapd.d
+      - /container/service/slapd/assets/certs/
+    ports:
+      - "389:389"
+      - "636:636"
+    hostname: "arqsoft.org"
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "academy-ldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "8085:80"
+    links:
+      - academy-ldap
+      - "8085:80"
+    links:
+      - academy-ldap 
