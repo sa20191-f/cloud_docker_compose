@@ -46,6 +46,10 @@ services:
     image: mongo
     ports:
       - "27017:27017"
+    command:
+    - mongod
+    - --replSet
+    - rs0
   songs-path-ms:
     container_name: songs_path-ms
     image: pahigueraf/songs_path
