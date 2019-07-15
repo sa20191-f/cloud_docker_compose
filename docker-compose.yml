@@ -1,25 +1,25 @@
-version: '2.1'
+version: '2'
 
 services:
-  users_db:
-    container_name: users_db
+  users-db:
+    container_name: users-db
     image: nouchka/sqlite3:latest
     stdin_open: true
     tty: true
     volumes:
-      - ./db/:/root/db/
+      - /root/db/
   users-ms:
     container_name: users_ms
     image: fgomezl/register_and_auth_ms
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:3001"
     depends_on:
-      - users_db
+      - users-db
     environment:
       PORT: '3001'
     ports:
       - "3001:3001"
   lists-db:
-    container_name: lists_db
+    container_name: lists-db
     image: mysql:5.7
     ports:
       - "3306:3306"
@@ -30,7 +30,7 @@ services:
       MYSQL_DATABASE: lists-db
       MYSQL_HOST: lists-db
   lists-ms:
-    container_name: lists_ms
+    container_name: lists-ms
     image: serbatero/lists-ms
     command: bundle exec rails s -p 4000 -b '0.0.0.0'
     volumes:
@@ -41,13 +41,13 @@ services:
       - "4000:4000"
     depends_on:
       - lists-db
-  songs_path_db:
-    container_name: songs_path_db
+  songs-path-db:
+    container_name: songs-path-db
     image: mongo
     ports:
       - "27017:27017"
-  songs_path_ms:
-    container_name: songs_path_ms
+  songs-path-ms:
+    container_name: songs_path-ms
     image: pahigueraf/songs_path
     restart: always
     ports:
@@ -55,9 +55,9 @@ services:
     environment:
       PORT: '3003'
     links:
-      - songs_path_db
-  upload_song_ms:
-    container_name: upload_song_ms
+      - songs-path-db
+  upload-song-ms:
+    container_name: upload-song-ms
     image: pahigueraf/upload_songs_ms
     restart: always
     ports:
@@ -72,39 +72,39 @@ services:
       WSINTERFACE_URL: 'wsinterface-ms'
       WSINTERFACE_PORT: '4500'
       WSINTERFACE_ENTRY: '/'
-      PLAY_URL: 'play_song_ms'
+      PLAY_URL: 'play-song-ms'
       PLAY_PORT: '3004'
       PLAY_ENTRY: '/api'
       USERS_URL: 'users-ms'
       USERS_PORT: '3001'
       USERS_ENTRY: 'api/v1'
-      UPLOAD_URL: 'upload_song_ms'
+      UPLOAD_URL: 'upload-song-ms'
       UPLOAD_PORT: '3002'
       UPLOAD_ENTRY: ''
-      PATH_URL: 'songs_path_ms'
+      PATH_URL: 'songs-path-ms'
       PATH_PORT: '3003'
       PATH_ENTRY: ''
       PORT: '5000'
     ports:
       - "5000:5000"
-  # tumusica-proxy:
-  #   image: pahigueraf/sa_academy_proxy
-  #   container_name: tumusica-proxy
-  #   depends_on:
-  #     - tumusica-api
-  #   ports:
-  #     - "80:80"
-  play_song_ms:
-    container_name: play_song_ms
+  tumusica-proxy:
+    image: pahigueraf/sa_academy_proxy
+    container_name: tumusica-proxy
+    depends_on:
+      - tumusica-api
+    ports:
+      - "80:80"
+  play-song-ms:
+    container_name: play-song-ms
     image: campuzanoa/docker_play_song_ms
     environment:
       PORT: '3004'
     ports:
       - "3004:3004"
     links:
-      - songs_path_db
+      - songs-path-db
   tu-musica-web:
-    container_name: tu-musica_wa
+    container_name: tu-musica-wa
     image: pahigueraf/tumusica_web_client
     ports:
       - "4100:4100"
@@ -211,4 +211,3 @@ services:
       - /lists-app
     ports:
       - "4500:4500"  
-

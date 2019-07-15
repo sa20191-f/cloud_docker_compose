@@ -1,0 +1,19 @@
+users-ms:
+  scale: 1
+lists-db:
+  scale: 2
+lists-ms:
+  scale: 4
+songs-path-db:
+  scale: 2
+songs-path-ms:
+  scale: 4
+upload-song-ms:
+  scale: 2
+tumusica-api:
+  scale: 2
+play-song-ms:
+  scale: 3
+tu-musica-web:
+  scale: 2
+
